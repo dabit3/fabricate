@@ -46,7 +46,7 @@ def cli():
 @click.option(
     "--languages", "-l",
     multiple=True,
-    default=["python", "javascript", "rust", "solidity"],
+    default=["python", "typescript", "rust", "solidity"],
     help="Programming languages to use (can specify multiple)"
 )
 @click.option(
