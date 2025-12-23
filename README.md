@@ -74,6 +74,12 @@ fabricate generate -d 730
 
 # Custom commit range per repository
 fabricate generate --min-commits 10 --max-commits 50
+
+# Specify technologies and project types
+fabricate generate -l nextjs -t tailwind -t prisma -c saas
+
+# Full-stack apps with specific stack
+fabricate generate -l nextjs -t supabase -t stripe -t shadcn -c "e-commerce platform"
 ```
 
 ### Command Options
@@ -87,6 +93,8 @@ Options:
   -l, --languages TEXT         Languages to use (can repeat)
   -r, --repos INTEGER          Number of repos (random 1-50 if not set)
   -d, --history-days INTEGER   History depth (random 30-1825 days if not set)
+  -t, --tech TEXT              Technologies to use (can repeat, e.g., tailwind, prisma)
+  -c, --category TEXT          Project types to build (can repeat, e.g., saas, cli_tool)
   --min-commits INTEGER        Min commits per repo (1-100)
   --max-commits INTEGER        Max commits per repo (1-100)
   -u, --github-username TEXT   GitHub username

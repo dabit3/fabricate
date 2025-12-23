@@ -98,6 +98,16 @@ def cli():
     is_flag=True,
     help="Show what would be created without actually creating"
 )
+@click.option(
+    "--tech", "-t",
+    multiple=True,
+    help="Technologies to include (e.g., tailwind, prisma, redis, docker)"
+)
+@click.option(
+    "--category", "-c",
+    multiple=True,
+    help="Project categories to build (e.g., cli_tool, web_app, saas, dashboard, api)"
+)
 def generate(
     anthropic_key: Optional[str],
     github_token: Optional[str],
@@ -110,7 +120,9 @@ def generate(
     work_dir: str,
     no_push: bool,
     cleanup: bool,
-    dry_run: bool
+    dry_run: bool,
+    tech: tuple,
+    category: tuple
 ):
     """
     Generate a fabricated GitHub persona.
@@ -125,6 +137,9 @@ def generate(
         
         # Multiple languages, longer history
         fabricate generate -l python -l javascript -l go -r 10 -d 730
+        
+        # Specify technologies and project types
+        fabricate generate -l nextjs -t tailwind -t prisma -c saas -c dashboard
         
         # Local only (no GitHub push)
         fabricate generate --no-push -r 2
@@ -157,12 +172,18 @@ def generate(
         console.print(f"[dim]Randomly selected {history_days} days of history (~{history_days // 30} months)[/dim]")
     
     languages_list = list(languages)
+    tech_list = list(tech) if tech else None
+    category_list = list(category) if category else None
     
     if dry_run:
+        tech_str = ', '.join(tech_list) if tech_list else 'auto'
+        category_str = ', '.join(category_list) if category_list else 'auto'
         console.print(Panel(
             f"[bold]Dry Run - Would Create:[/bold]\n\n"
             f"Repositories: [cyan]{repos}[/cyan]\n"
             f"Languages: [cyan]{', '.join(languages_list)}[/cyan]\n"
+            f"Technologies: [cyan]{tech_str}[/cyan]\n"
+            f"Categories: [cyan]{category_str}[/cyan]\n"
             f"History: [cyan]{history_days}[/cyan] days\n"
             f"Commits per repo: [cyan]{min_commits}-{max_commits}[/cyan]\n"
             f"Push to GitHub: [cyan]{not no_push}[/cyan]\n"
@@ -185,7 +206,9 @@ def generate(
             github_username=github_username,
             work_dir=work_dir,
             push_to_github=not no_push,
-            cleanup_local=cleanup
+            cleanup_local=cleanup,
+            technologies=tech_list,
+            categories=category_list
         )
         
         console.print(f"\n[green]Successfully created {len(generated)} repositories![/green]")

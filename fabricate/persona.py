@@ -101,7 +101,9 @@ class PersonaFabricator:
                 complexity=complexity,
                 num_commits=num_commits,
                 name_style=config.repo_name_style,
-                existing_names=existing_names
+                existing_names=existing_names,
+                technologies=config.technologies,
+                categories=config.categories
             )
             
             # Generate commit dates
@@ -232,7 +234,9 @@ def run_fabrication(
     github_username: Optional[str] = None,
     work_dir: str = "./fabricated_repos",
     push_to_github: bool = True,
-    cleanup_local: bool = False
+    cleanup_local: bool = False,
+    technologies: Optional[list[str]] = None,
+    categories: Optional[list[str]] = None
 ) -> list[GeneratedRepo]:
     """
     Convenience function to run a complete fabrication.
@@ -249,6 +253,8 @@ def run_fabrication(
         work_dir: Directory for temporary repository files
         push_to_github: Whether to push to GitHub
         cleanup_local: Whether to remove local files after pushing
+        technologies: Optional list of technologies to use (e.g., tailwind, prisma)
+        categories: Optional list of project categories (e.g., cli_tool, web_app)
         
     Returns:
         List of generated repositories
@@ -259,7 +265,9 @@ def run_fabrication(
         num_repos=num_repos,
         history_days=history_days,
         min_commits_per_repo=min_commits,
-        max_commits_per_repo=max_commits
+        max_commits_per_repo=max_commits,
+        technologies=technologies,
+        categories=categories
     )
     
     fabricator = PersonaFabricator(

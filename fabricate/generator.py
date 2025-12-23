@@ -44,7 +44,7 @@ class GeneratedRepo:
 class CodeGenerator:
     """Generates code and repository content using Claude."""
     
-    def __init__(self, api_key: str, model: str = "claude-sonnet-4-20250514"):
+    def __init__(self, api_key: str, model: str = "claude-opus-4-5-20251101"):
         self.client = anthropic.Anthropic(api_key=api_key)
         self.model = model
         
@@ -95,7 +95,9 @@ class CodeGenerator:
         language: str,
         complexity: str,
         name_style: str = "descriptive",
-        existing_names: Optional[list[str]] = None
+        existing_names: Optional[list[str]] = None,
+        technologies: Optional[list[str]] = None,
+        categories: Optional[list[str]] = None
     ) -> dict:
         """Generate a unique repository concept."""
         
@@ -103,9 +105,19 @@ class CodeGenerator:
         if existing_names:
             existing_str = f"\n\nAVOID these names that already exist: {', '.join(existing_names)}"
         
-        category = random.choice(PROJECT_CATEGORIES)
+        # Use provided categories or pick random
+        if categories:
+            category = random.choice(categories)
+        else:
+            category = random.choice(PROJECT_CATEGORIES)
+        
         lang_config = LANGUAGE_CONFIGS.get(language, LANGUAGE_CONFIGS["python"])
         complexity_profile = COMPLEXITY_PROFILES[complexity]
+        
+        # Build technologies string if provided
+        tech_str = ""
+        if technologies:
+            tech_str = f"\n\nMUST use these technologies: {', '.join(technologies)}"
         
         # Randomly choose name length for variety
         name_length = random.choice(["one word (e.g., 'rustler', 'beacon', 'flux')", 
@@ -119,11 +131,12 @@ You respond ONLY with valid JSON, no markdown formatting or explanation."""
 
         user = f"""Generate a unique {complexity} complexity {language} project concept.
 
-Category hint: {category}
+Category: {category}
 Complexity: {complexity_profile['description']}
 Name style: {name_style} (descriptive=clear purpose, quirky=fun/memorable, technical=formal/precise)
 
 IMPORTANT - Name should be {name_length}. Vary between short punchy names and longer descriptive ones.
+{tech_str}
 {existing_str}
 
 Respond with ONLY this JSON structure:
@@ -397,14 +410,19 @@ IMPORTANT:
         complexity: str,
         num_commits: int,
         name_style: str = "descriptive",
-        existing_names: Optional[list[str]] = None
+        existing_names: Optional[list[str]] = None,
+        technologies: Optional[list[str]] = None,
+        categories: Optional[list[str]] = None
     ) -> GeneratedRepo:
         """Generate a complete repository with all commits."""
         
         console.print(f"\n[bold cyan]Generating {complexity} {language} repository...[/bold cyan]")
         
         # Generate concept
-        concept = self.generate_repo_concept(language, complexity, name_style, existing_names)
+        concept = self.generate_repo_concept(
+            language, complexity, name_style, existing_names,
+            technologies=technologies, categories=categories
+        )
         console.print(f"  [green]✓[/green] Concept: {concept['name']}")
         
         commits = []

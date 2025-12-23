@@ -47,6 +47,14 @@ class PersonaConfig(BaseModel):
         default="descriptive",
         description="Style for repo names: descriptive, quirky, technical"
     )
+    technologies: Optional[list[str]] = Field(
+        default=None,
+        description="Technologies to include (e.g., tailwind, prisma, redis, docker)"
+    )
+    categories: Optional[list[str]] = Field(
+        default=None,
+        description="Project categories to build (e.g., cli_tool, web_app, saas)"
+    )
     include_readme: bool = True
     include_license: bool = True
     license_type: str = "MIT"
