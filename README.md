@@ -21,12 +21,16 @@ All code is generated using Anthropic's Claude API, creating unique and realisti
 git clone https://github.com/yourusername/fabricate.git
 cd fabricate
 
-# Create virtual environment
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
+# Install with uv
+uv venv
+source .venv/bin/activate
+uv pip install -e .
+```
 
-# Install dependencies
-pip install -e .
+Or run directly without activating:
+
+```bash
+uv run fabricate generate
 ```
 
 ## Configuration
@@ -59,10 +63,10 @@ FABRICATE_GITHUB_TOKEN=ghp_...
 ### Basic Generation
 
 ```bash
-# Generate 5 repositories with default settings
+# Generate with random settings (1-50 repos, random history depth)
 fabricate generate
 
-# Specify languages and count
+# Specify exact count and languages
 fabricate generate -l python -l javascript -l rust -r 10
 
 # Custom history depth (commits spread over 2 years)
@@ -81,8 +85,8 @@ Options:
   -a, --anthropic-key TEXT     Anthropic API key
   -g, --github-token TEXT      GitHub personal access token
   -l, --languages TEXT         Languages to use (can repeat)
-  -r, --repos INTEGER          Number of repos to create (1-50)
-  -d, --history-days INTEGER   History depth in days (30-3650)
+  -r, --repos INTEGER          Number of repos (random 1-50 if not set)
+  -d, --history-days INTEGER   History depth (random 30-1825 days if not set)
   --min-commits INTEGER        Min commits per repo (1-100)
   --max-commits INTEGER        Max commits per repo (1-100)
   -u, --github-username TEXT   GitHub username

@@ -165,6 +165,22 @@ LANGUAGE_CONFIGS = {
         "common_dirs": ["src", "include", "tests"],
         "package_manager": "cmake",
     },
+    "nextjs": {
+        "extension": ".tsx",
+        "config_files": ["package.json", "next.config.js", "tsconfig.json", "tailwind.config.js"],
+        "common_dirs": ["app", "components", "lib", "public", "styles"],
+        "package_manager": "npm",
+        "framework": "Next.js",
+        "description": "Full-stack React framework with App Router",
+    },
+    "react": {
+        "extension": ".tsx",
+        "config_files": ["package.json", "vite.config.ts", "tsconfig.json", "tailwind.config.js"],
+        "common_dirs": ["src", "src/components", "src/hooks", "src/utils", "public"],
+        "package_manager": "npm",
+        "framework": "React + Vite",
+        "description": "React SPA with Vite bundler",
+    },
 }
 
 # Project idea templates by category
@@ -179,5 +195,8 @@ PROJECT_CATEGORIES = [
     "testing_tool",
     "devops",
     "machine_learning",
+    "web_app",
+    "dashboard",
+    "saas",
 ]
 

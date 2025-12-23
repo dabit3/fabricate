@@ -244,6 +244,8 @@ IMPORTANT:
             "rust": "cargo build",
             "go": "go mod download",
             "ruby": "bundle install",
+            "nextjs": "npm install",
+            "react": "npm install",
         }.get(language, "See documentation")
         
         run_cmd = {
@@ -253,6 +255,8 @@ IMPORTANT:
             "rust": "cargo run",
             "go": "go run .",
             "ruby": "ruby main.rb",
+            "nextjs": "npm run dev",
+            "react": "npm run dev",
         }.get(language, "./run")
         
         readme_content = f"""# {repo_concept['name']}
